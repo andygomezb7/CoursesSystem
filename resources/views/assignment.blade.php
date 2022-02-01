@@ -10,79 +10,28 @@
 </head>
 <body>
       
-@if (@$user)
 <div class="container">
-    <h1 align="center">View Courses</h1>
+    <h1 align="center" class="mb-3">Assignment List</h1>
     <table class="table table-bordered data-table">
         <thead>
             <tr>
                 <th>No</th>
-                <th>Name</th>
-                <th>Credits</th>
-                <th>Schedule</th>
-                <th>Teacher</th>
+                <th>Student</th>
+                <th>Course</th>
             </tr>
         </thead>
         <tbody>
+            @foreach($asignacion as $user)
                 <tr>
                     <td>{{ $user->id }}</td>
                     <td>
-                        <a href="" class="update" data-name="nombrecurso" data-type="text" data-pk="{{ $user->id }}" data-title="Enter name">{{ $user->nombrecurso }}</a>
+                        {{ $user->idestudiante }}
                     </td>
                     <td>
-                        <a href="" class="update" data-name="creditos" data-type="text" data-pk="{{ $user->id }}" data-title="Enter Credit">{{ $user->creditos }}</a>
+                        {{ $user->idmateria }}
                     </td>
                     <td>
-                        <a href="" class="update" data-name="horario" data-type="text" data-pk="{{ $user->id }}" data-title="Enter email">{{ $user->horario }}</a>
-                    </td>
-                    <td>
-                        <select name="profesor" class="form-control name_list">
-                            <option>Select Teacher</option>
-                            @foreach($teachers as $teacher)
-                            <option value="{{$teacher->id}}" <?php echo ($user->idprofesor == $teacher->id ? 'selected="selected"' : ''); ?>>{{$teacher->Nombre}}</option>
-                            @endforeach
-                        </select>
-                    </td>
-                </tr>
-        </tbody>
-    </table>
-    <h4 align="center">
-        <a href="{{ route('courses.home') }}" class="btn btn-warning">Back</a>
-    </h4>
-</div>
-@else
-<div class="container">
-    <h1 align="center" class="mb-3">Courses List</h1>
-    <table class="table table-bordered data-table">
-        <thead>
-            <tr>
-                <th>No</th>
-                <th>Name</th>
-                <th>Credits</th>
-                <th>Schedule</th>
-                <th>Teacher</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach($users as $user)
-                <tr>
-                    <td>{{ $user->id }}</td>
-                    <td>
-                        {{ $user->nombrecurso }}
-                    </td>
-                    <td>
-                        {{ $user->creditos }}
-                    </td>
-                    <td>
-                        {{ $user->horario }}
-                    </td>
-                    <td>
-                        {{ $user->idprofesor }}
-                    </td>
-                    <td>
-                        <a href="{{ route('courses.index', ['id' => $user->id] ) }}" class="btn btn-info btn-sm">Edit</a>
-                        <form  action="/materias/{{$user->id}}" method="post">
+                        <form  action="/asignacion/{{$user->id}}" method="post">
                                 @csrf
                                 @method('DELETE')
                             <input type="submit" class="btn btn-danger btn-sm" value="delete " >
@@ -97,7 +46,7 @@
 <hr class="my-5">
      
 <div class="container">
-    <h2 align="center" class="mb-3">Create new Course</h2>  
+    <h2 align="center" class="mb-3">Create new Assignment</h2>  
     <div class="form-group">
          <form name="add_name" id="add_name">  
 
@@ -114,14 +63,19 @@
             <div class="table-responsive">  
                 <table class="table table-bordered" id="dynamic_field">  
                     <tr>  
-                        <td><input type="text" name="name" placeholder="Enter your Name" class="form-control name_list" /></td>  
-                        <td><input type="text" name="credito" placeholder="Enter Credits" class="form-control name_list" /></td>  
-                        <td><input type="text" name="horario" placeholder="Enter Schedule" class="form-control name_list" /></td>  
+                        <td>
+                            <select name="estudiantes" class="form-control name_list">
+                                <option>Select Student</option>
+                                @foreach($estudiantes as $student)
+                                <option value="{{$student->id}}">{{$student->Nombre}}</option>
+                                @endforeach
+                            </select>
+                        </td>
                         <td>
                             <select name="profesor" class="form-control name_list">
-                                <option>Select Teacher</option>
-                                @foreach($teachers as $teacher)
-                                <option value="{{$teacher->id}}">{{$teacher->Nombre}}</option>
+                                <option>Select Course</option>
+                                @foreach($users as $user)
+                                <option value="{{$user->id}}">{{$user->nombrecurso}}</option>
                                 @endforeach
                             </select>
                         </td>
@@ -134,8 +88,6 @@
          </form>  
     </div> 
 </div>
-
-@endif
      
 <script type="text/javascript">
     $.fn.editable.defaults.mode = 'inline';
@@ -157,7 +109,7 @@
     });
 
     $(document).ready(function(){      
-      var postURL = "<?php echo url('materias'); ?>";
+      var postURL = "<?php echo url('asignacion', []); ?>";
       var i=1;  
 
 
@@ -182,7 +134,7 @@
 
       $('#submit').click(function(){            
            $.ajax({  
-                url:postURL,  
+                url:postURL + '/' + $('select[name=estudiantes]').val() + '/' + $('select[name=profesor]').val(),  
                 method:"POST",  
                 data:$('#add_name').serialize(),
                 type:'json',

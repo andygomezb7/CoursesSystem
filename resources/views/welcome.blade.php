@@ -75,7 +75,7 @@
                     <a href="{{ route('users.home') }}">Students</a>
                     <a href="{{ route('teachers.home') }}">Teachers</a>
                     <a href="{{ route('courses.home') }}">Courses</a>
-                    <a href="https://blog.laravel.com">Assignment</a>
+                    <a href="{{ route('assignment.home') }}">Assignment</a>
                 </div>
             </div>
         </div>

@@ -35,8 +35,8 @@ class CoursesController extends Controller
 
     public function put ($id) {
         $user = materias::find($id);
-
-        return view('courses', compact('user'));
+        $teachers = profesores::paginate(10);
+        return view('courses', compact('user', 'teachers'));
     }
 
     public function delete ($id) {

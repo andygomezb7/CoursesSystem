@@ -13,6 +13,7 @@
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\TeacherController;
 use App\Http\Controllers\CoursesController;
+use App\Http\Controllers\AssignmentController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -40,3 +41,9 @@ Route::post('materias', [CoursesController::class, 'update'])->name('courses.upd
 Route::get('materias/{id}', [CoursesController::class, 'put'])->name('courses.index');
 Route::put('materias/{id}', [CoursesController::class, 'change'])->name('courses.change');
 Route::delete('materias/{id}', [CoursesController::class, 'delete'])->name('courses.delete');
+
+// Assignment
+Route::get('asignacion', [AssignmentController::class, 'index'])->name('assignment.home');
+
+Route::delete('asignacion/{id}', [AssignmentController::class, 'delete'])->name('assignment.delete');
+Route::post('asignacion/{idEstudiante}/{idMateria}', [AssignmentController::class, 'assign'])->name('assignment.put');
